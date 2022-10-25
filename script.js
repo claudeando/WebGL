@@ -27,7 +27,69 @@ attStride[1] = 4;
 
 
 
-const create_shader = (id) => {
+const vertex_position = [
+    0.0, 1.0, 0.0,
+    1.0, 0.0, 0.0,
+    -1.0, 0.0, 0.0
+];
+
+const vertex_color = [
+    1.0, 0.0, 0.0, 1.0,
+    0.0, 1.0, 0.0, 1.0,
+    0.0, 0.0, 1.0, 1.0
+];
+
+const position_vbo = create_vbo(vertex_position);
+const color_vbo = create_vbo(vertex_color);
+
+gl.bindBuffer(gl.ARRAY_BUFFER, position_vbo);
+gl.enableVertexAttribArray(attLocation[0]);
+gl.vertexAttribPointer(attLocation[0], attStride[0], gl.FLOAT, false, 0, 0);
+
+gl.bindBuffer(l.ARRAY_BUFFER, color_vbo);
+gl.enableVertexAttribArray(attLocation[0]);
+gl.vertexAttribPointer(attLocation[1], attStride[1], gl.FLOAT, false, 0, 0);
+
+
+
+
+
+
+// minMatrix.js を用いた行列関連処理
+// matIVオブジェクトを生成
+var m = new matIV();
+
+// 各種行列の生成と初期化
+var mMatrix = m.identity(m.create());
+var vMatrix = m.identity(m.create());
+var pMatrix = m.identity(m.create());
+var mvpMatrix = m.identity(m.create());
+
+// ビュー座標変換行列
+m.lookAt([0.0, 1.0, 3.0], [0, 0, 0], [0, 1, 0], vMatrix);
+
+// プロジェクション座標変換行列
+m.perspective(90, c.width / c.height, 0.1, 100, pMatrix);
+
+// 各行列を掛け合わせ座標変換行列を完成させる
+m.multiply(pMatrix, vMatrix, mvpMatrix);
+m.multiply(mvpMatrix, mMatrix, mvpMatrix);
+
+// uniformLocationの取得
+var uniLocation = gl.getUniformLocation(prg, 'mvpMatrix');
+
+// uniformLocationへ座標変換行列を登録
+gl.uniformMatrix4fv(uniLocation, false, mvpMatrix);
+
+
+
+
+gl.drawArrays(gl.TRIANGLES, 0, 3);
+gl.flush();
+
+
+
+function create_shader(id) {
     let shader;
 
     const scriptElement = document.getElementById('id');
@@ -62,7 +124,7 @@ const create_shader = (id) => {
 }
 
 
-const create_program = (vs, fs) => {
+function create_program(vs, fs) {
     const program = gl.createProgram();
 
     gl.attachShader(program, vs);
@@ -79,7 +141,7 @@ const create_program = (vs, fs) => {
 }
 
 
-const create_vbo = (data) => {
+function create_vbo(data) {
     const vbo = gl.createBuffer();
 
     gl.bindBuffer(gl.ARRAY_BUFFER, vbo);
@@ -89,5 +151,4 @@ const create_vbo = (data) => {
     gl.bindBuffer(gl.ARRAY_BUFFER, null);
 
     return vbo;
-
 }
