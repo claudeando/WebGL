@@ -11,7 +11,6 @@ gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 console.log('hello');
 
 
-
 const v_shader = create_shader('vs');
 const f_shader = create_shader('fs');
 
@@ -46,10 +45,9 @@ gl.bindBuffer(gl.ARRAY_BUFFER, position_vbo);
 gl.enableVertexAttribArray(attLocation[0]);
 gl.vertexAttribPointer(attLocation[0], attStride[0], gl.FLOAT, false, 0, 0);
 
-gl.bindBuffer(l.ARRAY_BUFFER, color_vbo);
+gl.bindBuffer(gl.ARRAY_BUFFER, color_vbo);
 gl.enableVertexAttribArray(attLocation[0]);
 gl.vertexAttribPointer(attLocation[1], attStride[1], gl.FLOAT, false, 0, 0);
-
 
 
 
@@ -69,7 +67,7 @@ var mvpMatrix = m.identity(m.create());
 m.lookAt([0.0, 1.0, 3.0], [0, 0, 0], [0, 1, 0], vMatrix);
 
 // プロジェクション座標変換行列
-m.perspective(90, c.width / c.height, 0.1, 100, pMatrix);
+m.perspective(90, canvas.width / canvas.height, 0.1, 100, pMatrix);
 
 // 各行列を掛け合わせ座標変換行列を完成させる
 m.multiply(pMatrix, vMatrix, mvpMatrix);
@@ -92,7 +90,7 @@ gl.flush();
 function create_shader(id) {
     let shader;
 
-    const scriptElement = document.getElementById('id');
+    const scriptElement = document.getElementById(id);
 
     if (!scriptElement) {
         return alert('WebGL is not available.');
