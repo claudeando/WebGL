@@ -2,7 +2,7 @@
 
 This repo is all about the intro to WebGL and GLSL (OpenGL Shading Language).
 
-WebGL is a collective of APIs you get access to OpenGL with JavaScript.
+WebGL is a collective of API that enbles you to get access to OpenGL with JavaScript.
 
 General steps for you to declare 'Hello World' is...
 1. create an HTML canvas, and get the webGL context.
